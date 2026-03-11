@@ -5,6 +5,9 @@ import { inventory } from '@/data/mockData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { useTheme } from '@/contexts/ThemeContext';
 const DashboardPage = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const totalDonations = donations.reduce((sum, d) => sum + d.amount, 0);
   const upcomingEvents = events.filter(e => new Date(e.date) >= new Date('2026-03-10')).length;
   const pendingMeds = medications.filter(m => !m.given).length;
@@ -29,7 +32,13 @@ const DashboardPage = () => {
     { name: 'Female', value: residents.filter(r => r.gender === 'Female').length },
     { name: 'Male', value: residents.filter(r => r.gender === 'Male').length },
   ];
-  const pieColors = ['hsl(20, 26%, 52%)', 'hsl(40, 10%, 65%)'];
+
+  const barColor = isDark ? 'hsl(0, 0%, 85%)' : 'hsl(0, 0%, 15%)';
+  const pieColors = isDark ? ['hsl(0, 0%, 80%)', 'hsl(0, 0%, 50%)'] : ['hsl(0, 0%, 15%)', 'hsl(0, 0%, 40%)'];
+  const gridColor = isDark ? 'hsl(0, 0%, 22%)' : 'hsl(0, 0%, 90%)';
+  const tickColor = isDark ? 'hsl(0, 0%, 65%)' : 'hsl(0, 0%, 35%)';
+  const tooltipBg = isDark ? 'hsl(0, 0%, 10%)' : 'hsl(0, 0%, 100%)';
+  const tooltipText = isDark ? 'hsl(0, 0%, 90%)' : 'hsl(0, 0%, 10%)';
 
   return (
     <div>
