@@ -69,11 +69,11 @@ const DashboardPage = () => {
             <h3 className="font-heading text-lg font-medium mb-4">Donations Overview</h3>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={donationsByMonth}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(40, 10%, 85%)" />
-                <XAxis dataKey="month" tick={{ fontFamily: 'Source Sans 3', fontSize: 12 }} />
-                <YAxis tick={{ fontFamily: 'Source Sans 3', fontSize: 12 }} tickFormatter={v => `₹${v / 1000}K`} />
-                <Tooltip formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Amount']} />
-                <Bar dataKey="amount" fill="hsl(20, 26%, 52%)" radius={[4, 4, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                <XAxis dataKey="month" tick={{ fontFamily: 'Source Sans 3', fontSize: 12, fill: tickColor }} />
+                <YAxis tick={{ fontFamily: 'Source Sans 3', fontSize: 12, fill: tickColor }} tickFormatter={v => `₹${v / 1000}K`} />
+                <Tooltip formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Amount']} contentStyle={{ backgroundColor: tooltipBg, color: tooltipText, border: `1px solid ${gridColor}` }} />
+                <Bar dataKey="amount" fill={barColor} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
