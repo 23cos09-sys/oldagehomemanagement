@@ -3,7 +3,7 @@ import { residents, staff, donations, events, activities, medications } from '@/
 import { Users, UserCog, Heart, CalendarDays, Pill, AlertTriangle } from 'lucide-react';
 import { inventory } from '@/data/mockData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-
+import { useTheme } from '@/contexts/ThemeContext';
 const DashboardPage = () => {
   const totalDonations = donations.reduce((sum, d) => sum + d.amount, 0);
   const upcomingEvents = events.filter(e => new Date(e.date) >= new Date('2026-03-10')).length;
