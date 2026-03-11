@@ -3,8 +3,11 @@ import { residents, staff, donations, events, activities, medications } from '@/
 import { Users, UserCog, Heart, CalendarDays, Pill, AlertTriangle } from 'lucide-react';
 import { inventory } from '@/data/mockData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-
+import { useTheme } from '@/contexts/ThemeContext';
 const DashboardPage = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const totalDonations = donations.reduce((sum, d) => sum + d.amount, 0);
   const upcomingEvents = events.filter(e => new Date(e.date) >= new Date('2026-03-10')).length;
   const pendingMeds = medications.filter(m => !m.given).length;
@@ -29,7 +32,13 @@ const DashboardPage = () => {
     { name: 'Female', value: residents.filter(r => r.gender === 'Female').length },
     { name: 'Male', value: residents.filter(r => r.gender === 'Male').length },
   ];
-  const pieColors = ['hsl(20, 26%, 52%)', 'hsl(40, 10%, 65%)'];
+
+  const barColor = isDark ? 'hsl(0, 0%, 85%)' : 'hsl(0, 0%, 15%)';
+  const pieColors = isDark ? ['hsl(0, 0%, 80%)', 'hsl(0, 0%, 50%)'] : ['hsl(0, 0%, 15%)', 'hsl(0, 0%, 40%)'];
+  const gridColor = isDark ? 'hsl(0, 0%, 22%)' : 'hsl(0, 0%, 90%)';
+  const tickColor = isDark ? 'hsl(0, 0%, 65%)' : 'hsl(0, 0%, 35%)';
+  const tooltipBg = isDark ? 'hsl(0, 0%, 10%)' : 'hsl(0, 0%, 100%)';
+  const tooltipText = isDark ? 'hsl(0, 0%, 90%)' : 'hsl(0, 0%, 10%)';
 
   return (
     <div>
@@ -60,11 +69,11 @@ const DashboardPage = () => {
             <h3 className="font-heading text-lg font-medium mb-4">Donations Overview</h3>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={donationsByMonth}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(40, 10%, 85%)" />
-                <XAxis dataKey="month" tick={{ fontFamily: 'Source Sans 3', fontSize: 12 }} />
-                <YAxis tick={{ fontFamily: 'Source Sans 3', fontSize: 12 }} tickFormatter={v => `₹${v / 1000}K`} />
-                <Tooltip formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Amount']} />
-                <Bar dataKey="amount" fill="hsl(20, 26%, 52%)" radius={[4, 4, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                <XAxis dataKey="month" tick={{ fontFamily: 'Source Sans 3', fontSize: 12, fill: tickColor }} />
+                <YAxis tick={{ fontFamily: 'Source Sans 3', fontSize: 12, fill: tickColor }} tickFormatter={v => `₹${v / 1000}K`} />
+                <Tooltip formatter={(value: number) => [`₹${value.toLocaleString()}`, 'Amount']} contentStyle={{ backgroundColor: tooltipBg, color: tooltipText, border: `1px solid ${gridColor}` }} />
+                <Bar dataKey="amount" fill={barColor} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -75,12 +84,12 @@ const DashboardPage = () => {
             <h3 className="font-heading text-lg font-medium mb-4">Residents by Gender</h3>
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
-                <Pie data={residentsByGender} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                <Pie data={residentsByGender} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`} labelLine={{ stroke: tickColor }}>
                   {residentsByGender.map((_, i) => (
                     <Cell key={i} fill={pieColors[i]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: tooltipBg, color: tooltipText, border: `1px solid ${gridColor}` }} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
