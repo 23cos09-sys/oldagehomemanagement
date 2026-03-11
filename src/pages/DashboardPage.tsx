@@ -84,12 +84,12 @@ const DashboardPage = () => {
             <h3 className="font-heading text-lg font-medium mb-4">Residents by Gender</h3>
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
-                <Pie data={residentsByGender} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                <Pie data={residentsByGender} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`} labelLine={{ stroke: tickColor }}>
                   {residentsByGender.map((_, i) => (
                     <Cell key={i} fill={pieColors[i]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: tooltipBg, color: tooltipText, border: `1px solid ${gridColor}` }} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
